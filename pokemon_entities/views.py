@@ -1,6 +1,6 @@
 import folium
 import json
-
+from pokemon_entities.models import PokemonEntity
 from django.http import HttpResponseNotFound
 from django.shortcuts import render
 
@@ -40,11 +40,11 @@ def show_all_pokemons(request):
             )
 
     pokemons_on_page = []
-    for pokemon in pokemons:
+    for pokemon in PokemonEntity.objects.all():
         pokemons_on_page.append({
-            'pokemon_id': pokemon['pokemon_id'],
-            'img_url': pokemon['img_url'],
-            'title_ru': pokemon['title_ru'],
+            'pokemon_id': pokemon.id,
+            'img_url': pokemon.pokemon.img,
+            'title_ru': pokemon.pokemon.title,
         })
 
     return render(request, 'mainpage.html', context={
