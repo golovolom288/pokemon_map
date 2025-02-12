@@ -59,28 +59,36 @@ def show_all_pokemons(request):
 
 
 def show_pokemon(request, pokemon_id):
-    pokemons = PokemonEntity.objects.filter(id=pokemon_id)
-    for pokemon in pokemons:
-        if pokemon.id == int(pokemon_id):
-            requested_pokemon = pokemon
-            pokemon_url = request.build_absolute_uri(MEDIA_URL+str(requested_pokemon.pokemon.img))
-            break
-    else:
-        return HttpResponseNotFound('<h1>Такой покемон не найден</h1>')
-
+    try:
+        pokemonentity = PokemonEntity.objects.get(id=pokemon_id)
+        pokemon_url = request.build_absolute_uri(MEDIA_URL + str(pokemonentity.pokemon.img))
+    except PokemonEntity.DoesNotExist:
+        return HttpResponseNotFound("<h1>Покемон не найден<h2>")
+    previous_evolution = None
+    next_evolution = None
+    evolution = pokemonentity.pokemon.previous_evolution
+    if evolution:
+        evolution_url = request.build_absolute_uri(MEDIA_URL + str(evolution.img))
+        print(evolution)
+        previous_evolution = {
+            "pokemon_id": evolution.id,
+            "img_url": evolution_url,
+            "title_ru": evolution.title,
+        }
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
     add_pokemon(
-        folium_map, requested_pokemon.Lat,
-        requested_pokemon.Lon,
+        folium_map, pokemonentity.Lat,
+        pokemonentity.Lon,
         pokemon_url
     )
     page_pokemon = {
-        "pokemon_id": pokemon.id,
+        "pokemon_id": pokemonentity.id,
         "img_url": pokemon_url,
-        "title_ru": requested_pokemon.pokemon.title,
-        "title_en": requested_pokemon.pokemon.title_en,
-        "title_jp": requested_pokemon.pokemon.title_jp,
-        "description": requested_pokemon.pokemon.description,
+        "title_ru": pokemonentity.pokemon.title,
+        "title_en": pokemonentity.pokemon.title_en,
+        "title_jp": pokemonentity.pokemon.title_jp,
+        "description": pokemonentity.pokemon.description,
+        "previous_evolution": previous_evolution
     }
 
     return render(request, 'pokemon.html', context={
