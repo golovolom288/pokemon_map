@@ -7,7 +7,7 @@ class Pokemon(models.Model):
     title_jp = models.CharField(max_length=200, null=True)
     description = models.TextField(null=True)
     img = models.ImageField(null=True, upload_to="pokemon_images")
-    previous_evolution = models.ForeignKey("self", on_delete=models.CASCADE, null=True, blank=True)
+    previous_evolution = models.ForeignKey("self", on_delete=models.CASCADE, null=True, blank=True, related_name="next_evolutions")
 
     def __str__(self):
         return '{}'.format(self.title)
