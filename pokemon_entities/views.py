@@ -2,7 +2,7 @@ import folium
 import json
 from pokemon_entities.models import PokemonEntity, Pokemon
 from django.http import HttpResponseNotFound
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from datetime import datetime
 from django.utils import timezone
 from pogomap.settings import MEDIA_URL
@@ -59,11 +59,8 @@ def show_all_pokemons(request):
 
 
 def show_pokemon(request, pokemon_id):
-    try:
-        pokemonentity = PokemonEntity.objects.get(id=pokemon_id)
-        pokemon_url = request.build_absolute_uri(MEDIA_URL + str(pokemonentity.pokemon.img))
-    except PokemonEntity.DoesNotExist:
-        return HttpResponseNotFound("<h1>Покемон не найден<h2>")
+    pokemonentity = get_object_or_404(PokemonEntity, id=pokemon_id)
+    pokemon_url = request.build_absolute_uri(MEDIA_URL + str(pokemonentity.pokemon.img))
     prev_evolution_data = None
     n_evolution_data = None
     next_evolution = pokemonentity.pokemon.next_evolutions.first()
