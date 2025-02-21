@@ -16,15 +16,15 @@ class Pokemon(models.Model):
 class PokemonEntity(models.Model):
     pokemon = models.ForeignKey(Pokemon, on_delete=models.CASCADE, verbose_name="Вид покемона:",
                                 related_name="Entities")
-    Lat = models.FloatField(verbose_name="Широта:")
-    Lon = models.FloatField(verbose_name="Долгота:")
-    Appeared_at = models.DateTimeField(null=True, verbose_name="Появится в:")
-    Disappeared_at = models.DateTimeField(null=True, verbose_name="Пропадёт в:")
-    Level = models.FloatField(null=True, verbose_name="Уровень покемона:")
-    Health = models.FloatField(null=True, verbose_name="Здоровье покемона:")
-    Strength = models.FloatField(null=True, verbose_name="Сила покемона:")
-    Defence = models.FloatField(null=True, verbose_name="Защита покемона:")
-    Stamina = models.FloatField(null=True, verbose_name="Выносливость покемона:")
+    lat = models.FloatField(verbose_name="Широта:")
+    lon = models.FloatField(verbose_name="Долгота:")
+    appeared_at = models.DateTimeField(null=True, verbose_name="Появится в:")
+    disappeared_at = models.DateTimeField(null=True, verbose_name="Пропадёт в:")
+    level = models.FloatField(null=True, verbose_name="Уровень покемона:")
+    health = models.FloatField(null=True, verbose_name="Здоровье покемона:")
+    strength = models.FloatField(null=True, verbose_name="Сила покемона:")
+    defence = models.FloatField(null=True, verbose_name="Защита покемона:")
+    stamina = models.FloatField(null=True, verbose_name="Выносливость покемона:")
 
     def __str__(self):
         return '{}'.format(self.pokemon)
